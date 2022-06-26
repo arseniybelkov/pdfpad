@@ -54,3 +54,4 @@ def entrypoint():
     padded_images = pad(images.copy(), args.height, args.width, args.n_pixels)
     
     images[0].save(Path(args.path).parent / f'{Path(args.path).stem}_padded.pdf', save_all=True, append_images=padded_images)
+    print(f'Padded pdf was saved in {Path(args.path).parent / f'{Path(args.path).stem}_padded.pdf'}')
