@@ -47,7 +47,7 @@ def entrypoint():
     parser.add_argument('--path', '-p', type=str, help='Path to a pdf file')
     parser.add_argument('--height', '-hg', type=int, default=3, help='Number of pages in a column')
     parser.add_argument('--width', '-w', type=int, default=3, help='Number of pages in a row')
-    parser.add_argument('--n_pixels', '-N', type=int, default=32, help='Number of pixels for padding')
+    parser.add_argument('--n_pixels', '-N', type=int, default=256, help='Number of pixels for padding')
     args = parser.parse_args()
     
     images = parse_pdf(args.path)
