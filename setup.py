@@ -9,7 +9,7 @@ setup(
     license='MIT',
     url='https://github.com/arseniybelkov/pdfpad',
     install_requires=requirements,
-    python_requires='>=3.8',
+    python_requires='>=3.6',
     entry_points={
         'console_scripts': [
             'pdfpad = pdfpad.main:entrypoint',
