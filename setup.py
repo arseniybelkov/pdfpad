@@ -12,7 +12,7 @@ setup(
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
-            'pdfpad = pdfpad.main:entrypoint',
+            'pdfpad = pdfpad.entrypoint:entrypoint',
         ],
     },
 )
