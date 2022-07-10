@@ -9,7 +9,7 @@ from PIL import Image
 from tqdm import tqdm
 
 
-def parse_pdf(path: str) -> List[Image.Image]:
+def parse_pdf(path: Union[str, Path]) -> List[Image.Image]:
     """
     Read .pdf file and convert it into a list of PIL Images
     
@@ -22,7 +22,7 @@ def parse_pdf(path: str) -> List[Image.Image]:
     return images
 
 
-def pad(images: list, h: int, w: int, n_pixels: int) -> List[Image.Image]:
+def pad(images: List[Image.Image], h: int, w: int, n_pixels: int) -> List[Image.Image]:
     """
     Pad each image in the list, according to its position in h x w grid.
     Returns list of padded images.
