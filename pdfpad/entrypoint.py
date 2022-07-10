@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from .interface import parse_args, pad
+from .interface import parse_pdf, pad
     
 
 def entrypoint():
