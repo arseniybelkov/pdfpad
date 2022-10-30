@@ -71,5 +71,10 @@ def pad(images: List[Image.Image], h: int, w: int, n_pixels: int) -> List[Image.
             break
         images[k * h * w + w * i + j] = check_i[i](images[k * h * w + w * i + j])
         images[k * h * w + w * i + j] = check_j[j](images[k * h * w + w * i + j])
+        
+        if w == 1:
+            images[k * h * w + w * i + j] = pad_left(images[k * h * w + w * i + j])
+        if h == 1:
+            images[k * h * w + w * i + j] = pad_top(images[k * h * w + w * i + j])
 
     return images
