@@ -99,3 +99,12 @@ def pdfpad(
     fp: Union[PathLike, bytes, BufferedReader], h: int, w: int, n_pixels: int
 ) -> List[Image.Image]:
     return pad(parse_pdf(fp), h, w, n_pixels)
+
+
+def save_pdf(images: List[Image.Image], filepath: PathLike) -> str:
+    new_path = Path(filepath).parent / f"{Path(filepath).stem}_padded.pdf"
+    if len(images) > 1:
+        images[0].save(new_path, save_all=True, append_images=images[1:])
+    else:
+        images[0].save(new_path)
+    return str(new_path)

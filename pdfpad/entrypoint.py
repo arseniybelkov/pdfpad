@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from .interface import parse_pdf, pad
+from .interface import pdfpad, save_pdf
 
 
 def entrypoint():
@@ -18,16 +18,5 @@ def entrypoint():
     )
     args = parser.parse_args()
 
-    images = parse_pdf(args.path)
-    padded_images = pad(images.copy(), args.height, args.width, args.n_pixels)
-
-    if len(padded_images) > 1:
-        padded_images[0].save(
-            Path(args.path).parent / f"{Path(args.path).stem}_padded.pdf",
-            save_all=True,
-            append_images=padded_images[1:],
-        )
-    else:
-        padded_images[0].save(
-            Path(args.path).parent / f"{Path(args.path).stem}_padded.pdf"
-        )
+    padded_images = pdfpad(args.path, args.height, args.width, args.n_pixels)
+    save_pdf(padded_images, args.path)
