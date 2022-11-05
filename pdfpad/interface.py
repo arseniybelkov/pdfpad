@@ -62,7 +62,7 @@ def pad(images: List[Image.Image], h: int, w: int, n_pixels: int) -> List[Image.
         width, height = image.size
         new_width = width + right + left
         new_height = height + top + bottom
-        result = Image.new(image.mode, (new_width, new_height), 255)
+        result = Image.new(image.mode, (new_width, new_height), (255, 255, 255))
         result.paste(image, (left, top))
         return result
 
