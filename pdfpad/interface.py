@@ -1,25 +1,40 @@
 import argparse
 import math
+from io import BufferedReader
 from itertools import product as iterproduct
 from pathlib import Path
 from typing import List, Union
 
-from pdf2image import convert_from_path
+from pdf2image import convert_from_bytes, convert_from_path
 from PIL import Image
 from tqdm import tqdm
 
 
-def parse_pdf(path: Union[str, Path]) -> List[Image.Image]:
+PathLike = Union[str, Path]
+
+
+def parse_pdf(fp: Union[PathLike, bytes, BufferedReader]) -> List[Image.Image]:
     """
     Read .pdf file and convert it into a list of PIL Images
 
     Parameters
     ----------
-    path : str, Path
-        path to the .pdf document.
+    fp : Union[PathLike, bytes, BufferedReader]
+        path to the .pdf document, or bytes
     """
-    images = convert_from_path(path)
-    return images
+    if isinstance(fp, bytes):
+        return convert_from_bytes(fp)
+    elif isinstance(fp, BufferedReader):
+        content = fp.read()
+        if not isinstance(content, bytes):
+            content = content.encode()
+        return convert_from_bytes(content)
+    elif isinstance(fp, (str, Path)):
+        return convert_from_path(Path(fp).resolve())
+    else:
+        raise ValueError(
+            f"file must be either a path, or a byte stream, got {type(fp)}"
+        )
 
 
 def pad(images: List[Image.Image], h: int, w: int, n_pixels: int) -> List[Image.Image]:
@@ -47,7 +62,7 @@ def pad(images: List[Image.Image], h: int, w: int, n_pixels: int) -> List[Image.
         width, height = image.size
         new_width = width + right + left
         new_height = height + top + bottom
-        result = Image.new(image.mode, (new_width, new_height), 0)
+        result = Image.new(image.mode, (new_width, new_height), (255, 255, 255))
         result.paste(image, (left, top))
         return result
 
@@ -71,10 +86,25 @@ def pad(images: List[Image.Image], h: int, w: int, n_pixels: int) -> List[Image.
             break
         images[k * h * w + w * i + j] = check_i[i](images[k * h * w + w * i + j])
         images[k * h * w + w * i + j] = check_j[j](images[k * h * w + w * i + j])
-        
+
         if w == 1:
             images[k * h * w + w * i + j] = pad_left(images[k * h * w + w * i + j])
         if h == 1:
             images[k * h * w + w * i + j] = pad_top(images[k * h * w + w * i + j])
 
     return images
+
+
+def pdfpad(
+    fp: Union[PathLike, bytes, BufferedReader], h: int, w: int, n_pixels: int
+) -> List[Image.Image]:
+    return pad(parse_pdf(fp), h, w, n_pixels)
+
+
+def save_pdf(images: List[Image.Image], filepath: PathLike) -> str:
+    new_path = Path(filepath).parent / f"{Path(filepath).stem}_padded.pdf"
+    if len(images) > 1:
+        images[0].save(new_path, save_all=True, append_images=images[1:])
+    else:
+        images[0].save(new_path)
+    return str(new_path)
