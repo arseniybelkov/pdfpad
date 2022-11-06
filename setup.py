@@ -18,6 +18,7 @@ setup(
     version=version,
     license="MIT",
     url="https://github.com/arseniybelkov/pdfpad",
+    packages=["pdfpad"],
     install_requires=requirements,
     long_description=long_description,
     long_description_content_type="text/markdown",
