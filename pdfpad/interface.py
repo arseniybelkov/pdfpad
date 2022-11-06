@@ -29,7 +29,7 @@ def parse_pdf(fp: Union[PathLike, bytes, BufferedReader]) -> List[Image.Image]:
         if not isinstance(content, bytes):
             content = content.encode()
         return convert_from_bytes(content)
-    elif isinstance(fp, PathLike):
+    elif isinstance(fp, (str, Path)):
         return convert_from_path(Path(fp).resolve())
     else:
         raise ValueError(
