@@ -4,9 +4,11 @@ on:
   release:
     types: [published]
 
-uses: BogDAAAMN/deta-deploy-action@v1.0.1
-with:
-  deta-access-token: ${{ secrets.DETA_ACCESS_TOKEN }}
-  deta-name: web
-  deta-project: pdfpad
-  deta-project-dir: web
+jobs:
+  deploy:
+    uses: BogDAAAMN/deta-deploy-action@v1.0.1
+    with:
+      deta-access-token: ${{ secrets.DETA_ACCESS_TOKEN }}
+      deta-name: web
+      deta-project: pdfpad
+      deta-project-dir: web
