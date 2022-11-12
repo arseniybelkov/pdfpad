@@ -26,6 +26,7 @@ async def main():
     content = """
         <body>
         <form action="/processfile" enctype="multipart/form-data" method="post" id="form1">
+
         
         <label for file>Choose PDF:</label>
         file: <input name="file" type="file" form="form1">
