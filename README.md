@@ -2,6 +2,9 @@
  
 ## Installation
 In order to install the package execute the following commands:  
+```python
+pip install pdfpad
+```
 ```bash  
 git clone https://github.com/arseniybelkov/pdfpad.git
 cd pdfpad  
@@ -14,6 +17,12 @@ gh repo clone arseniybelkov/pdfpad
 cd pdfpad  
 pip install -e .  
 ```
+
+If you have any error involving `poppler`, please execute  
+```bash
+sudo apt install poppler-utils
+```
+
 
 ## Usage
 ```bash

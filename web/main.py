@@ -1,4 +1,6 @@
-from fastapi import FastAPI, UploadFile, Form
+import os
+
+from fastapi import BackgroundTasks, FastAPI, Form, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 
 from pdfpad import pdfpad, save_pdf
@@ -7,9 +9,15 @@ from pdfpad import pdfpad, save_pdf
 app = FastAPI()
 
 
-@app.post("/processfile/")
-async def process_file(file: UploadFile, h: int=Form(...), w: int=Form(...), n_pixels: int=Form(...)) -> FileResponse:
+def remove_file(path: str) -> None:
+    os.unlink(path)
+
+
+@app.post("/processfile")
+async def process_file(background_tasks: BackgroundTasks, file: UploadFile,
+                       h: int=Form(...), w: int=Form(...), n_pixels: int=Form(...)) -> FileResponse:
     saved_path = save_pdf(pdfpad(await file.read(), h, w, n_pixels), file.filename)
+    background_tasks.add_task(remove_file, saved_path)
     return FileResponse(saved_path)
 
 
@@ -17,7 +25,8 @@ async def process_file(file: UploadFile, h: int=Form(...), w: int=Form(...), n_p
 async def main():
     content = """
         <body>
-        <form action="/processfile/" enctype="multipart/form-data" method="post" id="form1">
+        <form action="/processfile" enctype="multipart/form-data" method="post" id="form1">
+
         
         <label for file>Choose PDF:</label>
         file: <input name="file" type="file" form="form1">
@@ -40,3 +49,8 @@ async def main():
         </body>
     """
     return HTMLResponse(content=content)
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="127.0.0.1", port=7575, reload=True)
